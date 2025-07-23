@@ -6,7 +6,8 @@ class Main:
         print("Launching of AI assistant...")
         print("Loading modules...")
         self.userDataManager = UserDataManager(self)
-        self.assistantCore=AssistantCore(self)
+        from Assistant.LLM.LLMEngine import LLMModel
+        self.assistantCore=AssistantCore(LLMModel.NOUS_HERMES,self)
 
     def getUserDataManager(self):
         return self.userDataManager
@@ -14,13 +15,13 @@ class Main:
         return self.assistantCore
     def run(self):
         print("💬 Готово! Введи сообщение (или 'exit' для выхода):")
-
+        from Assistant.LLM.LLMEngine import LLMModel
         while True:
             user_input = input("\n👤 Ты: ")
             if user_input.strip().lower() in ["exit", "quit", "выход"]:
                 print("👋 Завершаю...")
                 break
-            reply = self.getAssistantCore().createTxtRequest("console",user_input);
+            reply = self.getAssistantCore().createTxtRequest(LLMModel.NOUS_HERMES,"console",user_input)
             print(f"🤖 Ассистент: {reply}")
 
 

@@ -8,7 +8,7 @@ class NousHermes(LLMBase):
             model_path="models/Nous-Hermes-2-Mistral-7B-DPO.Q4_K_M.gguf",
             n_ctx=16000,  # 4096 default
             n_threads=12,
-            n_gpu_layers=40,  # 40 или 0 если только CPU
+            n_gpu_layers=0,  # 40 или 0 если только CPU
             chat_format="chatml"
         )
     def unload(self):

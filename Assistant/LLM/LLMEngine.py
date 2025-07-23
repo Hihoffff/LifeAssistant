@@ -1,6 +1,5 @@
 from enum import Enum
-from Assistant.LLM.Llama import LLama
-from Assistant.LLM.NousHermes import NousHermes
+
 
 
 
@@ -11,6 +10,8 @@ class LLMBase:  #структура каждого llm файла
     def response(self, messages):...
 
 class LLMModel(Enum):   #список доступных моделей
+    from Assistant.LLM.Llama import LLama
+    from Assistant.LLM.NousHermes import NousHermes
     LLAMA = LLama()
     NOUS_HERMES = NousHermes()
     def get_name(self):
