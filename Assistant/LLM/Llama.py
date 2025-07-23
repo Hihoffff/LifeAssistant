@@ -1,0 +1,27 @@
+from llama_cpp import Llama
+from Assistant.LLM.LLMEngine import LLMBase
+
+class LLama(LLMBase):
+    def load(self):
+        self.llm = Llama(
+            model_path="models/Meta-Llama-3-8B-Instruct-Q4_0.gguf",
+            n_ctx=4096,
+            n_threads=12,
+            n_gpu_layers=40,  # или 0 если только CPU
+            chat_format="chatml"
+        )
+    def unload(self):
+        del self.llm
+        import gc
+        gc.collect()
+    def response(self,messages):
+        response = self.llm.create_chat_completion(
+            messages=messages,
+            max_tokens=1024,
+            temperature=0.2
+        )
+        reply = response["choices"][0]["message"]["content"]
+        return reply
+
+    def get_name(self):
+        return "llama_3_8B"
