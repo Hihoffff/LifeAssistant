@@ -7,8 +7,8 @@ class NousHermes(LLMBase):
         self.llm = Llama(
             model_path="models/Nous-Hermes-2-Mistral-7B-DPO.Q4_K_M.gguf",
             n_ctx=16000,  # 4096 default
-            n_threads=12,
-            n_gpu_layers=0,  # 40 или 0 если только CPU
+            n_threads=8,
+            n_gpu_layers=40,  # 40 или 0 если только CPU
             chat_format="chatml"
         )
     def unload(self):
@@ -19,7 +19,7 @@ class NousHermes(LLMBase):
         response = self.llm.create_chat_completion(
             messages=messages,
             max_tokens=1024,
-            temperature=0.1
+            temperature=1
         )
         reply = response["choices"][0]["message"]["content"]
         return reply
