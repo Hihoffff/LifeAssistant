@@ -1,15 +1,29 @@
 import queue
+from enum import Enum
+
+class LLMRequestType(Enum):
+    BASE=0,
+    SPLITER=1,
+    FUNCTION=2,
+
+class LLMRequest:
+    user: str
+    type: LLMRequestType
+    request: str
+
+
 
 class RequestManager:
-    def __init__(self):
+    from main import Main
+
+    def __init__(self, main : Main):
         self.requests = queue.Queue()
+        self.responses = queue.Queue()
+        self.main = main
+    def sendRequest(self, request:LLMRequest):
+        self.requests.put(request)
+    def getLastResponse(self) -> LLMRequest:
+        return self.responses.get()
 
 
 
-
-
-class TextRequest:
-    user: str
-    source: str
-    destination: str
-    request: str
