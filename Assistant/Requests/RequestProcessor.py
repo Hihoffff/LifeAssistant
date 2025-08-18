@@ -4,7 +4,7 @@ import threading
 class RequestProcessor(threading.Thread):
     from Assistant.Requests.RequestManager import RequestManager
     def __init__(self, request_manager:RequestManager):
-        super().__init__(daemon=True)
+        super().__init__(daemon=True) # daemon=True поток завершится вместе с программой
         self.RequestManager = request_manager
         self.running = True
 
@@ -13,12 +13,9 @@ class RequestProcessor(threading.Thread):
 
     def run(self):
         from Assistant.Requests.RequestManager import LLMRequest
-        import queue
         while self.running:
-            try:
+            if not self.RequestManager.isRequestsEmpty():
                 # Получаем запрос (блокирует поток, пока нет запроса)
-                request: LLMRequest = self.RequestManager.requests.get(timeout=1)
-            except queue.Empty:
-                continue
-            print("(RequestProcessor) Processing request type: {}".format(request.type) + "from user {}".format(request.user))
+                request: LLMRequest = self.RequestManager.getLastRequest()
+                print("(RequestProcessor) Processing request type: {}".format(request.type) + "from user {}".format(request.user))
 

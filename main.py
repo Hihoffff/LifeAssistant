@@ -1,6 +1,7 @@
 from Assistant.AssistantCore import AssistantCore
 from UserData.UserDataManager import UserDataManager
 
+
 class Main:
     def __init__(self):
         print("Launching of AI assistant...")
@@ -8,21 +9,25 @@ class Main:
         self.userDataManager = UserDataManager(self)
         from Assistant.LLM.LLMEngine import LLMModel
         self.assistantCore=AssistantCore(LLMModel.NOUS_HERMES,self)
+        from Assistant.Requests.RequestManager import RequestManager
+        self.requestManager = RequestManager(self)
+        from ConsoleManager import ConsoleManager
+        self.consoleManager=ConsoleManager(self.requestManager)
+        from Assistant.Requests.RequestProcessor import RequestProcessor
+        self.requestProcessor = RequestProcessor(self.requestManager)
 
     def getUserDataManager(self):
         return self.userDataManager
     def getAssistantCore(self):
         return self.assistantCore
     def run(self):
-        print("💬 Готово! Введи сообщение (или 'exit' для выхода):")
-        from Assistant.LLM.LLMEngine import LLMModel
-        while True:
-            user_input = input("\n👤 Ты: ")
-            if user_input.strip().lower() in ["exit", "quit", "выход"]:
-                print("👋 Завершаю...")
-                break
-            reply = self.getAssistantCore().createTxtRequest(LLMModel.NOUS_HERMES,"console",user_input)
-            print(f"🤖 Ассистент: {reply}")
+        print("Launching threads...")
+        self.requestProcessor.start()
+        self.consoleManager.runOutputThread()
+
+        print("Launching console...")
+        self.consoleManager.runInput()
+
 
 
 def main():
@@ -31,6 +36,6 @@ def main():
     print("Program closed!")
 
 
-
 if __name__ == "__main__":
     main()
+

@@ -1,7 +1,7 @@
 from Assistant.LLM.LLMEngine import LLMEngine,LLMModel
 from Assistant.promt.Promter import Promter
 
-class AssistantCore:
+class AssistantCore: #центральный класс сборки
     def __init__(self,model:LLMModel,main: "Main"):
         self.Main = main
         self.LLMEngine = LLMEngine()
